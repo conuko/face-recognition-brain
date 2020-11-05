@@ -34,7 +34,26 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
+      box: {},
     }
+  }
+
+  // Calculate the Location of the face to display the face box on the right place:
+  calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height),
+    }
+  }
+
+  displayFaceBox = (box) => {
+    this.setState({box: box});
   }
 
   onInputChange = (event) => {
@@ -57,7 +76,7 @@ class App extends Component {
         'c0c0ac362b03416da06ab3fa36fb58e3',
         this.state.input)
       .then(response => {
-        console.log('hi', response)
+        this.displayFaceBox(this.calculateFaceLocation(response))
         if (response) {
           fetch('http://localhost:3000/image', {
             method: 'put',
@@ -97,7 +116,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onButtonSubmit={this.onButtonSubmit}
         />
-        <FaceRecognition imageUrl={this.state.imageUrl} />
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
       </div>
     );
   }
