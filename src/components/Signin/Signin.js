@@ -19,7 +19,7 @@ class Signin extends React.Component {
         this.setState({signInPassword: event.target.value})
     }
 
-    // submit the input when the "submit" button is clicked
+    // submit the input to the backend when the "submit" button is clicked
     onSubmitSignIn = () => {
         fetch('http://localhost:3000/signin', {
             method: 'post',
