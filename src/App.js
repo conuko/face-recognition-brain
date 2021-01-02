@@ -13,7 +13,7 @@ import './App.css';
 // API key from Clarifai
 
 const app = new Clarifai.App({
-  apiKey: '4fe1e570ee3c4976a1442112f18949c3'
+  apiKey: '791bc87bd9474e4086709eec678ec68c'
 });
 
 
@@ -30,23 +30,25 @@ const particlesOptions = {
   }
 }
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -86,7 +88,7 @@ class App extends Component {
     this.setState({imageUrl: this.state.input});
     app.models
       .predict(
-        'c0c0ac362b03416da06ab3fa36fb58e3',
+        Clarifai.FACE_DETECT_MODEL,
         this.state.input)
       .then(response => {
         this.displayFaceBox(this.calculateFaceLocation(response))
@@ -102,14 +104,14 @@ class App extends Component {
             .then(count => {
               this.setState(Object.assign(this.state.user, { entries: count}))
             })
-
+            .catch(console.log);
         }
       })
   }
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
