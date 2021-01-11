@@ -27,7 +27,7 @@ class Register extends React.Component {
 
     // submit the input to the backend when the "submit" button is clicked
     onSubmitSignIn = () => {
-        fetch('http://localhost:3000/register', {
+        fetch('https://mighty-retreat-10942.herokuapp.com/register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

@@ -21,7 +21,7 @@ class Signin extends React.Component {
 
     // submit the input to the backend when the "submit" button is clicked
     onSubmitSignIn = () => {
-        fetch('http://localhost:3000/signin', {
+        fetch('https://mighty-retreat-10942.herokuapp.com/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
